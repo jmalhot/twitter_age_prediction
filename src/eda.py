@@ -19,23 +19,6 @@ sys.path.append(ROOT_DIR)
 from configs import CONSTANTS
 
 
-def error_plot(actual, predicted):
-    """
-    input: validation set true pain scores and predicted pain scores
-    purpose: scatter plot to show true vs predicted points
-    output: None
-    """
-
-    ig, ax = plt.subplots(figsize=(10,10))
-    ax.scatter(actual, predicted)
-    ax.plot([actual.min(), actual.max()+1], [actual.min(), actual.max()+1], 'k--', lw=4)
-    ax.set_xlabel('Actual')
-    ax.set_ylabel('Predicted')
-    ax.set_title("Error Plot of Actual vs Predicted Pain Score")
-    ax.legend(['Predicted', 'True'])
-
-    plt.show()
-    ig.savefig(CONSTANTS.IMAGES_OUTPUT_PATH / 'error_plot.jpg', dpi=ig.dpi)
 
 def count_plot(df:pd.DataFrame, col1:str, col2:str, fig_name:str = 'countplot.jpg'):
     """

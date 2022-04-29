@@ -7,7 +7,8 @@ from configs import DATAFILES
 from proprocessing import preprocessing
 from utils import *
 from eda import eda
-from model import model_training
+from model import model_training, model_prediction
+
 
 def load_csv_data(path):
     """
@@ -52,6 +53,7 @@ def load_dataset():
 
     df_ages_train = load_csv_data(DATAFILES.AGES_TRAIN)
     df_ages_test = load_csv_data(DATAFILES.AGES_TEST)
+    df_ages_test.columns= ['ID']
     df_mentions = load_csv_data(DATAFILES.MENTIONS )
     df_friends = load_csv_data(DATAFILES.FRIENDS)
 
@@ -80,9 +82,20 @@ def load_dataset():
 
     #eda(df)
 
-    df = outlier_removal(df, ['Age','friends_count','listed_count'])
+    '''
+    Split Train and Test here
+    '''
 
-    df = log_transformation(df, ['followers_count',
+    df_test  = pd.merge(df, df_ages_test, left_on=['user_id'], right_on =['ID'])
+    df['included_in_test_set'] = df['user_id'].apply(lambda x: 1 if x in df_ages_test.ID.unique().tolist() else 0)
+    df_train = df[df.included_in_test_set ==0]
+
+    df_train.drop(columns=['included_in_test_set'], inplace=True)
+
+
+    df_train = outlier_removal(df_train, ['Age','friends_count','listed_count'])
+
+    df_train = log_transformation(df_train, ['followers_count',
                                 'listed_count',
                                 'friends_count',
                                 'retweet_count',
@@ -92,16 +105,33 @@ def load_dataset():
                                 'emojis_count'
                                 ]
                             )
-    df = bool_to_vec(df, ['geo_enabled','default_profile','profile_background_tile'])
+
+    df_test = log_transformation(df_test, ['followers_count',
+                                'listed_count',
+                                'friends_count',
+                                'retweet_count',
+                                'tweets_retweet_count',
+                                'tweets_favorite_count',
+                                'tweet_length',
+                                'emojis_count'
+                                ]
+                            )
+    df_train = bool_to_vec(df_train, ['geo_enabled','default_profile','profile_background_tile'])
+    df_test = bool_to_vec(df_test, ['geo_enabled','default_profile','profile_background_tile'])
+
+    df_train = missing_values_replacement(df_train, ['friends_count', 'retweet_count', 'mentions_count'])
+
+    df_test = missing_values_replacement(df_test, ['friends_count', 'retweet_count', 'mentions_count'])
+
+    df_train.loc[:,'location'] = df_train['location'].apply(lambda x: 'unknown' if x=='' else x)
+
+    print(df_train.columns)
+    print(df_test.columns)
 
 
+    model_training(df_train)
 
-    df = missing_values_replacement(df, ['friends_count', 'retweet_count', 'mentions_count'])
-
-
-    df.loc[:,'location'] = df['location'].apply(lambda x: 'unknown' if x=='' else x)
-
-    model_training(df)
+    model_prediction(df_test)
 
     #output= DATAFILES.ROOT/'data/df.csv'
     #df.to_csv(output)

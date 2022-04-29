@@ -8,6 +8,9 @@ import os
 from sklearn.metrics import mean_squared_log_error, r2_score, mean_squared_error
 import numpy as np
 from configs import CONSTANTS
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
 
 
 def bool_to_vec(df, cols):
@@ -79,6 +82,23 @@ def log_transformation(df:pd.DataFrame, cols_list):
     return df
 
 
+def error_plot(actual, predicted):
+    """
+    input: validation set true pain scores and predicted pain scores
+    purpose: scatter plot to show true vs predicted points
+    output: None
+    """
+
+    ig, ax = plt.subplots(figsize=(10,10))
+    ax.scatter(actual, predicted)
+    ax.plot([actual.min(), actual.max()+1], [actual.min(), actual.max()+1], 'k--', lw=4)
+    ax.set_xlabel('Actual')
+    ax.set_ylabel('Predicted')
+    ax.set_title("Error Plot of Actual vs Predicted Pain Score")
+    ax.legend(['Predicted', 'True'])
+
+    plt.show()
+    ig.savefig(CONSTANTS.IMAGES_OUTPUT_PATH / 'error_plot.jpg', dpi=ig.dpi)
 
 def compute_metrics(actual , predicted):
     """

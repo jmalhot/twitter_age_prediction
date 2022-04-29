@@ -40,6 +40,21 @@ def drop_user_id_col(df):
 
 
 
+def model_load():
+
+    """
+    input: None
+    purpose: loads trained model for prediction
+    output: model
+    """
+
+
+    l_debug = ' - Model loading from : {}'.format(CONSTANTS.MODEL_PATH)
+    print(l_debug)
+    model = pickle.load( open(CONSTANTS.MODEL_PATH, "rb" ) )
+
+    return model
+
 def model_dump(model):
     """
     input: trained model
@@ -57,24 +72,7 @@ def model_dump(model):
         raise ValueError(l_debug)
 
 
-def model_load():
-
-    """
-    input: None
-    purpose: loads trained model for prediction
-    output: model
-    """
-
-
-    l_debug = ' - Model loading from : {}'.format(CONSTANTS.MODEL_PATH)
-    print(l_debug)
-    model = pickle.load( open(CONSTANTS.MODEL_PATH, "rb" ) )
-
-    return model
-
-
-
-def model_evaluation(val_df: pd.DataFrame):
+def model_prediction(test_df: pd.DataFrame):
     """
     input: dataframe
     purpose: model performance evaluation
@@ -82,15 +80,17 @@ def model_evaluation(val_df: pd.DataFrame):
     """
 
 
-    l_debug = 'Model Evaluation started......'
+    l_debug = 'Model Predicted started......'
     print(l_debug)
 
     model = model_load()
 
+    #CONSTANTS.INPUT_FEATURES.pop(13)
 
-    X_test=val_df[CONSTANTS.INPUT_FEATURES]
-    X_test =drop_user_id_col(X_test)
-    y_test=val_df[CONSTANTS.OUTPUT_FEATURES]
+    X_test=test_df[CONSTANTS.INPUT_FEATURES]
+    y_test=test_df[CONSTANTS.OUTPUT_FEATURES]
+
+    print(X_test.columns)
 
     l_debug = ' - Predict method called......'
     print(l_debug)
@@ -106,9 +106,8 @@ def model_evaluation(val_df: pd.DataFrame):
     '''
     Convert log transformed feature to original values
     '''
-    for output_feature in CONSTANTS.LOG_FEATURES:
+    for output_feature in ['Age']:
         X_test[output_feature] = X_test[output_feature].apply(lambda x: np.expm1(x))
-
 
     save_validations_result(X_test)
 
@@ -125,9 +124,12 @@ def model_training(df: pd.DataFrame):
     l_debug = 'Model Training started......'
     print(l_debug)
 
+    CONSTANTS.INPUT_FEATURES.pop(14)
 
     X_train=df[CONSTANTS.INPUT_FEATURES]
     y_train=df[CONSTANTS.OUTPUT_FEATURES]
+
+    print(X_train.columns)
 
     cat_vars=['creation_day_of_week']
 
