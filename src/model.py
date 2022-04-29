@@ -104,8 +104,8 @@ def model_prediction(test_df: pd.DataFrame):
     '''
     Convert log transformed feature to original values
     '''
-    for output_feature in ['Age']:
-        X_test[output_feature] = X_test[output_feature].apply(lambda x: np.expm1(x))
+    #for output_feature in ['Age']:
+    #    X_test[output_feature] = X_test[output_feature].apply(lambda x: np.expm1(x))
 
     save_validations_result(X_test)
 
