@@ -1,0 +1,10 @@
+idea/
+.DS_Store
+__pycache__
+# Specific file formats
+*.pyc
+*.project
+*.pydevproject
+*.settings
+*.csv
+*.pkl
