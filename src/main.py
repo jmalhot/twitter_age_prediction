@@ -1,7 +1,3 @@
-
-
-
-
 import json
 import pandas as pd
 import pickle
@@ -10,13 +6,25 @@ import pandas as pd
 from configs import DATAFILES
 from proprocessing import preprocessing
 from utils import *
+from eda import eda
+from model import model_training
 
 def load_csv_data(path):
+    """
+    input: csv path
+    purpose: load
+    output: dataframe
+    """
 
     return pd.read_csv(path)
 
 
 def load_url_data(profile_url, profile_path, cache_file=True):
+    """
+    input: urls
+    purpose: load
+    output: dataframe
+    """
 
     cache_path =str(profile_path) + ".cache.pickle"
 
@@ -36,6 +44,11 @@ def load_url_data(profile_url, profile_path, cache_file=True):
 
 
 def load_dataset():
+    """
+    input: None
+    purpose: load datasets
+    output: dataframe
+    """
 
     df_ages_train = load_csv_data(DATAFILES.AGES_TRAIN)
     df_ages_test = load_csv_data(DATAFILES.AGES_TEST)
@@ -53,7 +66,7 @@ def load_dataset():
 
 
 
-    preprocessing(df_user_profile, df_tweets, df_friends_profile, df_mention_profile)
+    df_user_profile, df_tweets ,_ , _ = preprocessing(df_user_profile, df_tweets, df_friends_profile, df_mention_profile)
 
     df_user_profile = pd.merge(df_user_profile, df_mentions_count, left_on=['id'], right_on=['ID'], how='left')
 
@@ -61,9 +74,11 @@ def load_dataset():
 
     df = pd.merge(df, df_ages_train, right_on='ID', left_on='user_id')
 
-    #df.drop(columns=['id','ID_x'], inplace=True)
+    df.drop(columns=['ID_x','ID_y'], inplace=True)
 
-    #df= set_categorical_features(df)
+    df= set_categorical_features(df)
+
+    #eda(df)
 
     df = outlier_removal(df, ['Age','friends_count','listed_count'])
 
@@ -84,26 +99,30 @@ def load_dataset():
     df = missing_values_replacement(df, ['friends_count', 'retweet_count', 'mentions_count'])
 
 
-
-    #df.loc[:,'friends_count'] =df['friends_count'].fillna(0)
-    #df.loc[:,'retweet_count'] =df['retweet_count'].fillna(0)
-    #df.loc[:,'mentions_count'] =df['retweet_count'].fillna(0)
     df.loc[:,'location'] = df['location'].apply(lambda x: 'unknown' if x=='' else x)
 
+    model_training(df)
 
-
-    #df_user_profile.to_csv('df_user_profile.csv')
-    #df_tweets.to_csv('df_tweets.csv')
-    df.to_csv("df.csv")
+    #output= DATAFILES.ROOT/'data/df.csv'
+    #df.to_csv(output)
 
 
 
 def main():
+    """
+    input: None
+    purpose: Main function
+    output: None
+    """
 
     try:
 
         l_debug = ' Main Started: '
         load_dataset()
+        l_debug = ' Main Ended: '
+
+        print(l_debug)
+
 
     except Exception as e:
         l_debug = "Exception at  "+ l_debug + ' stage - ' +str(e)

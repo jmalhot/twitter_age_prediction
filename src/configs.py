@@ -35,3 +35,44 @@ class CONSTANTS:
                              'friends_count',
                              'retweet_count']
     TWEET_FEATURES =[]
+
+    OUTPUT_FEATURES = ['Age']
+
+    INPUT_FEATURES = ['geo_enabled',
+                    'profile_sidebar_border_color',
+                    'default_profile',
+                    'followers_count',
+                    'profile_sidebar_fill_color',
+                    'listed_count',
+                    'profile_background_color',
+                    'profile_background_tile',
+                    'profile_link_color',
+                    'location',
+                    'profile_text_color',
+                    'friends_count',
+                    'retweet_count',
+                    'mentions_count',
+                    'user_id',
+                    'lang',
+                    'tweets_retweet_count',
+                    'tweets_favorite_count',
+                    'possibly_sensitive',
+                    'source_parsed',
+                    'creation_day_of_week',
+                    'tweet_length',
+                    'negative_sentiment',
+                    'neutral_sentiment',
+                    'positive_sentiment',
+                    'emojis_count']
+
+    HYPER_PARAMS = {'learning_rate': 0.1,
+                   'boosting_type': 'gbdt',
+                   'random_state':0,
+                   'reg_alpha':1,
+                   'reg_lambda':1
+                  }
+
+    MODEL_PATH = ROOT_DIR_PARENT / 'models/model.pkl'
+    METRICS_PATH = ROOT_DIR_PARENT / 'models/metrics.txt'
+    MODEL_PREDICTIONS_OUTPUT_PATH = ROOT_DIR_PARENT / 'data/predictions_result.csv'
+    IMAGES_OUTPUT_PATH = ROOT_DIR_PARENT / 'visualization/'

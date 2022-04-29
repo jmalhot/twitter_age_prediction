@@ -6,12 +6,22 @@ import pandas as pd
 from configs import CONSTANTS
 
 def parse_user_id(df:pd.DataFrame, new_col:str, target_col:str) -> pd.DataFrame:
+    """
+    input: dataframe and its column
+    purpose: parse nested json field
+    output: dataframe
+    """
 
     df[new_col] = pd.json_normalize(df.user)[target_col]
 
     return df
 
 def parse_retweet_count(df:pd.DataFrame, new_col:str, target_col:str) -> pd.DataFrame:
+    """
+    input: dataframe and its column
+    purpose: parse nested json field
+    output: dataframe
+    """
 
     df[new_col] = pd.json_normalize(df.status)[target_col]
 
@@ -21,10 +31,11 @@ def parse_retweet_count(df:pd.DataFrame, new_col:str, target_col:str) -> pd.Data
 
 
 def parse_tweet_source(df:pd.DataFrame, new_col:str, target_col:str) -> pd.DataFrame:
-
-    '''
-    Parse Tweet Source using BeautifulSoup as it may have meaningfull information
-    '''
+    """
+    input: dataframe and its column
+    purpose: Parse Tweet Source using BeautifulSoup as it may have meaningfull information
+    output: dataframe
+    """
 
     df[new_col] = df[target_col].apply(lambda x: BeautifulSoup(str(x),'html.parser').text)
 
@@ -46,6 +57,12 @@ def preprocessing(df_user_profile:pd.DataFrame,
                  df_tweets:pd.DataFrame,
                  df_friends_profile:pd.DataFrame,
                  df_mention_profile:pd.DataFrame):
+
+    """
+    input: dataframes
+    purpose:feature engineering
+    output: dataframes
+    """
 
 
     df_tweets = preprocessing_tweets(df_tweets)

@@ -29,3 +29,7 @@ Execute following to start troas recommendation process
 ```
    $ python twitter_age_prediction/main.py
 ```
+
+## Presentation depicting Project Details
+
+https://docs.google.com/presentation/d/1TUk1MDRD3IsC_5En8R5gzQ9yT0kFSgYXuruVMEOjirE/edit#slide=id.g12292283240_0_39
