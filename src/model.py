@@ -23,7 +23,7 @@ def save_validations_result(df):
     output: None
     """
 
-    df.to_csv(CONSTANTS.MODEL_PREDICTIONS_OUTPUT_PATH, index=False)
+    df[{'id', 'Age'}].to_csv(CONSTANTS.MODEL_PREDICTIONS_OUTPUT_PATH, index=False)
 
 
 
@@ -85,7 +85,7 @@ def model_prediction(test_df: pd.DataFrame):
 
     model = model_load()
 
-    
+
     X_test=test_df[CONSTANTS.INPUT_FEATURES]
     y_test=test_df[CONSTANTS.OUTPUT_FEATURES]
 
@@ -101,6 +101,8 @@ def model_prediction(test_df: pd.DataFrame):
     for output_feature in CONSTANTS.OUTPUT_FEATURES:
         X_test[output_feature] = y_test[output_feature]
         X_test['pred_'+output_feature] = y_pred_df[output_feature]
+
+    X_test['ID'] = test_df['id']
 
     '''
     Convert log transformed feature to original values

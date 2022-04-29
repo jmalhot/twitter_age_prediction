@@ -129,10 +129,6 @@ def load_dataset():
 
     model_prediction(df_test)
 
-    #output= DATAFILES.ROOT/'data/df.csv'
-    #df.to_csv(output)
-
-
 
 def main():
     """

@@ -74,5 +74,5 @@ class CONSTANTS:
 
     MODEL_PATH = ROOT_DIR_PARENT / 'models/model.pkl'
     METRICS_PATH = ROOT_DIR_PARENT / 'models/metrics.txt'
-    MODEL_PREDICTIONS_OUTPUT_PATH = ROOT_DIR_PARENT / 'data/predictions_result.csv'
+    MODEL_PREDICTIONS_OUTPUT_PATH = ROOT_DIR_PARENT / 'data/ages_pred.csv'
     IMAGES_OUTPUT_PATH = ROOT_DIR_PARENT / 'visualization/'
