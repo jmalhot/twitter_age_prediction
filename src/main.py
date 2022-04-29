@@ -80,7 +80,7 @@ def load_dataset():
 
     df= set_categorical_features(df)
 
-    #eda(df)
+    eda(df)
 
     '''
     Split Train and Test here
