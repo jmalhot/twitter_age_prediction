@@ -85,8 +85,7 @@ def model_prediction(test_df: pd.DataFrame):
 
     model = model_load()
 
-    #CONSTANTS.INPUT_FEATURES.pop(13)
-
+    
     X_test=test_df[CONSTANTS.INPUT_FEATURES]
     y_test=test_df[CONSTANTS.OUTPUT_FEATURES]
 

@@ -125,10 +125,6 @@ def load_dataset():
 
     df_train.loc[:,'location'] = df_train['location'].apply(lambda x: 'unknown' if x=='' else x)
 
-    print(df_train.columns)
-    print(df_test.columns)
-
-
     model_training(df_train)
 
     model_prediction(df_test)
