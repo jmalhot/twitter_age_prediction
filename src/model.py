@@ -23,7 +23,7 @@ def save_validations_result(df):
     output: None
     """
 
-    df[{'id', 'Age'}].to_csv(CONSTANTS.MODEL_PREDICTIONS_OUTPUT_PATH, index=False)
+    df.to_csv(CONSTANTS.MODEL_PREDICTIONS_OUTPUT_PATH, index=False)
 
 
 
@@ -89,8 +89,6 @@ def model_prediction(test_df: pd.DataFrame):
     X_test=test_df[CONSTANTS.INPUT_FEATURES]
     y_test=test_df[CONSTANTS.OUTPUT_FEATURES]
 
-    print(X_test.columns)
-
     l_debug = ' - Predict method called......'
     print(l_debug)
     y_pred=model.predict(X_test)
@@ -102,7 +100,6 @@ def model_prediction(test_df: pd.DataFrame):
         X_test[output_feature] = y_test[output_feature]
         X_test['pred_'+output_feature] = y_pred_df[output_feature]
 
-    X_test['ID'] = test_df['id']
 
     '''
     Convert log transformed feature to original values
@@ -129,8 +126,6 @@ def model_training(df: pd.DataFrame):
 
     X_train=df[CONSTANTS.INPUT_FEATURES]
     y_train=df[CONSTANTS.OUTPUT_FEATURES]
-
-    print(X_train.columns)
 
     cat_vars=['creation_day_of_week']
 
